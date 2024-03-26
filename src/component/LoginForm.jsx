@@ -25,12 +25,16 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
 
-    console.log(rootUrl);
     e.preventDefault();
     try {
       const response = await axios.post(rootUrl + "/authentication/login", formData);
-      const token = response.data.token;
+      const token = response.data.data.tokens.access_token.access_token;
+      const expireAfter = response.data.data.tokens.access_token.expireAfter;
+      const refreshToken = response.data.data.tokens.refresh_token.refresh_token;
+
       localStorage.setItem('token', token);
+      localStorage.setItem('expire_after', expireAfter);
+      localStorage.setItem('refresh_token', refreshToken);
       window.location.href = '/home';
     } catch (error) {
       console.error('Đăng nhập thất bại:', error);
